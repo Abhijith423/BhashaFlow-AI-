@@ -1,0 +1,102 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "text-translate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "72177956-971a-48ed-be2d-c63c0481770c",
+      "name": "Webhook",
+      "webhookId": "337478d5-040c-4d0e-800c-f0586fb350f6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"translategemma:4b\",\n  \"prompt\": \"Translate the following English text into {{ $('Webhook').item.json.body.targetLang }}. Output ONLY the translated text:\\n\\n{{ $('Webhook').item.json.body.text }}\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "0bd552b2-9bb5-48d0-9010-d9b1fccd3b40",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fromEmail": "abhijithemes@gmail.com",
+        "toEmail": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "=Translated Text ({{ $('Webhook').item.json.body.targetLang }})",
+        "emailFormat": "text",
+        "text": "={{ $json.response }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9fc0dd99-eb72-4154-9a0e-76d7051baf20",
+      "name": "Send an Email",
+      "webhookId": "a79cf1dd-bf34-4922-b635-dbfce533e796",
+      "credentials": {
+        "smtp": {
+          "id": "4jdFbFsFjrI9xB16",
+          "name": "SMTP account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "12b8e36a-653f-4198-9753-dc50cf0814a2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a7e72bb6cb8f8c2a46fd4d8ff6fbe0e421b6b7d88c401ecf4891e967d6c98c34"
+  },
+  "nodeGroups": [],
+  "id": "ia7VtNSizEblwnhi",
+  "tags": []
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Java + Ollama + n8n Text Translator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 580px; margin: 40px auto; padding: 0 16px; }
+        .box { margin-bottom: 14px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; }
+        input, select, textarea { width: 100%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 11px; background: #1d4ed8; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
+        .ok { background: #dcfce7; color: #14532d; padding: 10px; border-radius: 6px; margin-bottom: 14px; }
+        .err { background: #fee2e2; color: #7f1d1d; padding: 10px; border-radius: 6px; margin-bottom: 14px; }
+    </style>
+</head>
+<body>
+    <h2>English Text Translator (Java -> n8n -> Ollama -> Email)</h2>
+
+    <div th:if="${success}" class="ok" th:text="${success}"></div>
+    <div th:if="${error}" class="err" th:text="${error}"></div>
+
+    <form method="post" action="/translate-text">
+        <div class="box">
+            <label for="email">നിങ്ങളുടെ Email</label>
+            <input id="email" type="email" name="email" required placeholder="example@gmail.com" />
+        </div>
+
+        <div class="box">
+            <label for="targetLang">ഏത് ഭാഷയിലേക്ക് മാറ്റണം?</label>
+            <select id="targetLang" name="targetLang">
+                <option value="Malayalam">Malayalam (മലയാളം)</option>
+                <option value="Hindi">Hindi (ഹിന്ദി)</option>
+                <option value="Tamil">Tamil (തമിഴ്)</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+            </select>
+        </div>
+
+        <div class="box">
+            <label for="sourceText">ഇംഗ്ലീഷ് Text എഴുതുക</label>
+            <textarea id="sourceText" name="sourceText" rows="5" required placeholder="Type English text here..."></textarea>
+        </div>
+
+        <button type="submit">Translate &amp; Send Email</button>
+    </form>
+</body>
+</html>
